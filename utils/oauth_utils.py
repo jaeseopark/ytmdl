@@ -1,4 +1,3 @@
-import json
 import os
 
 import googleapiclient.discovery
@@ -7,7 +6,6 @@ from oauth2client import file, client, tools
 
 import const
 import firestore
-
 from utils.io_utils import safe_open
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.readonly", "https://www.googleapis.com/auth/drive.file"]
@@ -15,9 +13,10 @@ SCOPES = ["https://www.googleapis.com/auth/youtube.readonly", "https://www.googl
 
 def _lazy_init_clint_secrets(secrets_path):
     if not os.path.exists(secrets_path):
-        client_secrets = json.loads(firestore.get(const.FIRESTORE_APP, const.FIRESTORE_APP_CONFIG)[const.FIRESTORE_APP_CONFIG_KEY_CLIENT_SECRETS])
+        config_dict = firestore.get_dict(const.FIRESTORE_APP, const.FIRESTORE_APP_CONFIG)
+        client_secrets_str = config_dict[const.FIRESTORE_APP_CONFIG_KEY_CLIENT_SECRETS]
         with safe_open(secrets_path, 'w') as fp:
-            json.dump(client_secrets, fp)
+            fp.write(client_secrets_str)
 
 
 def get_service_object(service, version, user, user_data=None):
@@ -26,7 +25,7 @@ def get_service_object(service, version, user, user_data=None):
 
     store = file.Storage(token_path)
 
-    user_data = user_data or firestore.get(const.FIRESTORE_USERS, user)
+    user_data = user_data or firestore.get_dict(const.FIRESTORE_USERS, user)
     if user_data:
         with safe_open(token_path, 'w') as fp:
             fp.write(user_data[const.FIRESTORE_USERS_KEY_TOKEN])

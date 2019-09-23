@@ -15,8 +15,12 @@ else:
 db = firestore.client()
 
 
-def get(collection_id: str, document_id: str):
+def get_dict(collection_id: str, document_id: str):
     doc_ref = db.collection(collection_id).document(document_id)
+    return get(doc_ref)
+
+
+def get(doc_ref):
     try:
         doc = doc_ref.get()
         return doc.to_dict()

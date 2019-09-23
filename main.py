@@ -49,7 +49,7 @@ def process_user(request=None):
     request_json = request.get_json(silent=True)
     user = request_json['user']
 
-    user_data = firestore.get(const.FIRESTORE_USERS, user)
+    user_data = firestore.get_dict(const.FIRESTORE_USERS, user)
     svc_youtube = oauth_utils.get_service_object("youtube", "v3", user, user_data)
     videos = get_liked_videos(svc_youtube)
 
@@ -57,8 +57,6 @@ def process_user(request=None):
     videos_to_process = [v for v in videos if v['liked_at'] > last_processed]
 
     if videos_to_process:
-        # TODO: put videos_to_process on Cloud Tasks queue
-
         last_processed = videos[0]["liked_at"] if videos else 0
         user_data.update({const.FIRESTORE_USERS_KEY_LAST_PROCESSED: last_processed})
         firestore.set(const.FIRESTORE_USERS, user, user_data)
