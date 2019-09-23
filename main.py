@@ -5,26 +5,30 @@ from dateutil import parser
 
 import const
 import firestore
-from utils import gcp_utils, oauth_utils
+from utils import oauth_utils
 
 LIST_LIMIT = 100
 
 
-def process_item(item):
-    liked_at = int(time.mktime(parser.parse(item['snippet']['publishedAt']).utctimetuple()))
-    video_id = item['snippet']['resourceId']['videoId']
-    title = item['snippet']['title']
-    return {"liked_at": liked_at, "video_id": video_id, "title": title}
-
-
 def get_liked_videos(user: str, user_data):
+    def transform_item(item):
+        """
+        Transforms a Youtube PlaylistItem (https://developers.google.com/youtube/v3/docs/playlistItems) into a simpler JSON object with the following fields: video_id, title, liked_at
+        :param item: JSON representation of a PlaylistItem
+        :return: The transformed JSON object
+        """
+        video_id = item['snippet']['resourceId']['videoId']
+        title = item['snippet']['title']
+        liked_at = int(time.mktime(parser.parse(item['snippet']['publishedAt']).utctimetuple()))
+        return {"video_id": video_id, "title": title, "liked_at": liked_at}
+
     svc = oauth_utils.get_service_object("youtube", "v3", user, user_data)
     channel_req = svc.channels().list(part="contentDetails", mine=True)
 
     playlist_id = channel_req.execute()['items'][0]['contentDetails']['relatedPlaylists']['likes']
 
     token = None
-    items = []
+    transformed_items = []
 
     while True:
         params = {"part": "id,snippet", "playlistId": playlist_id, "maxResults": LIST_LIMIT if LIST_LIMIT < 50 else 50}
@@ -34,22 +38,19 @@ def get_liked_videos(user: str, user_data):
         video_req = svc.playlistItems().list(**params)
         r = video_req.execute()
 
-        items += [process_item(i) for i in r.get("items", list())]
+        transformed_items += [transform_item(i) for i in r.get("items", list())]
 
         token = r.get("nextPageToken")
 
-        if not token or len(items) >= LIST_LIMIT:
+        if not token or len(transformed_items) >= LIST_LIMIT:
             break
 
-    return items[:LIST_LIMIT]
+    return transformed_items[:LIST_LIMIT]
 
 
 def process_user(request=None):
-    if gcp_utils.is_cloud():
-        request_json = request.get_json(silent=True)
-        user = request_json['user']
-    else:
-        user = const.FIRESTORE_USERS_DEFAULT
+    request_json = request.get_json(silent=True)
+    user = request_json['user']
 
     user_data = firestore.get(const.FIRESTORE_USERS, user)
     videos = get_liked_videos(user, user_data)
@@ -67,5 +68,5 @@ def process_user(request=None):
     return json.dumps({'videos': videos, 'videos_to_process': videos_to_process}, ensure_ascii=False)
 
 
-if __name__ == "__main__":
-    print(process_user())
+def process_video(request=None):
+    raise NotImplementedError
