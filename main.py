@@ -7,8 +7,6 @@ import const
 import firestore
 from utils import oauth_utils
 
-LIST_LIMIT = 100
-
 
 def get_liked_videos(svc):
     def transform_item(item):
@@ -30,7 +28,7 @@ def get_liked_videos(svc):
     transformed_items = []
 
     while True:
-        params = {"part": "id,snippet", "playlistId": playlist_id, "maxResults": LIST_LIMIT if LIST_LIMIT < 50 else 50}
+        params = {"part": "id,snippet", "playlistId": playlist_id, "maxResults": const.YOUTUBE_LIST_LIMIT if const.YOUTUBE_LIST_LIMIT < 50 else 50}
         if token:
             params.update({"pageToken": token})
 
@@ -41,10 +39,10 @@ def get_liked_videos(svc):
 
         token = r.get("nextPageToken")
 
-        if not token or len(transformed_items) >= LIST_LIMIT:
+        if not token or len(transformed_items) >= const.YOUTUBE_LIST_LIMIT:
             break
 
-    return transformed_items[:LIST_LIMIT]
+    return transformed_items[:const.YOUTUBE_LIST_LIMIT]
 
 
 def process_user(request=None):
