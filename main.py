@@ -10,7 +10,7 @@ from utils import oauth_utils
 LIST_LIMIT = 100
 
 
-def get_liked_videos(user: str, user_data):
+def get_liked_videos(svc):
     def transform_item(item):
         """
         Transforms a Youtube PlaylistItem (https://developers.google.com/youtube/v3/docs/playlistItems) into a simpler JSON object with the following fields: video_id, title, liked_at
@@ -22,7 +22,6 @@ def get_liked_videos(user: str, user_data):
         liked_at = int(time.mktime(parser.parse(item['snippet']['publishedAt']).utctimetuple()))
         return {"video_id": video_id, "title": title, "liked_at": liked_at}
 
-    svc = oauth_utils.get_service_object("youtube", "v3", user, user_data)
     channel_req = svc.channels().list(part="contentDetails", mine=True)
 
     playlist_id = channel_req.execute()['items'][0]['contentDetails']['relatedPlaylists']['likes']
@@ -53,7 +52,8 @@ def process_user(request=None):
     user = request_json['user']
 
     user_data = firestore.get(const.FIRESTORE_USERS, user)
-    videos = get_liked_videos(user, user_data)
+    svc_youtube = oauth_utils.get_service_object("youtube", "v3", user, user_data)
+    videos = get_liked_videos(svc_youtube)
 
     last_processed = user_data.get(const.FIRESTORE_USERS_KEY_LAST_PROCESSED, 0)
     videos_to_process = [v for v in videos if v['liked_at'] > last_processed]
