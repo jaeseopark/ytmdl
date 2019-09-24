@@ -18,9 +18,9 @@ jobs:
       uses: actions/gcloud/auth@master
       env:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
-    - name: List Cloud Functions
+    - name: Deploy
       uses: actions/gcloud/cli@master
       with:
-        args: functions list
+        args: functions deploy function-1 --region=us-central1
       env:
         CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}

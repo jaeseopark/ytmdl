@@ -1,2 +1,3 @@
 python-dateutil
 oauth2client
+firebase-admin

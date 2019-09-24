@@ -1,3 +1,4 @@
+import json
 import time
 from copy import deepcopy
 
@@ -46,6 +47,7 @@ def get_liked_videos(svc):
 
 
 def process_user(request=None):
+    # TODO: change to schedule-based invocation.
     request_json = request.get_json(silent=True)
     user = request_json['user']
 
@@ -68,7 +70,9 @@ def process_user(request=None):
         user_data.update({const.FIRESTORE_USERS_KEY_LAST_PROCESSED: last_processed})
         user_ref.set(user_data)
 
-    return {'videos': videos, 'videos_to_process': videos_to_process, 'org_user_data': org_user_data, 'user_data': user_data}
+    # TODO: do not serialize when this function changes to schedule-based invocation.
+    response = {'videos': videos, 'videos_to_process': videos_to_process, 'org_user_data': org_user_data, 'user_data': user_data}
+    return json.dumps(response)
 
 
 def process_video(request=None):
