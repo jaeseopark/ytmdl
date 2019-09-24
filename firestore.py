@@ -1,4 +1,5 @@
 import os
+from typing import Sequence
 
 import firebase_admin
 import google as google
@@ -15,18 +16,19 @@ else:
 db = firestore.client()
 
 
-def get_dict(collection_id: str, document_id: str):
-    doc_ref = db.collection(collection_id).document(document_id)
-    return get(doc_ref)
+def find(*args: Sequence, doc_ref=None):
+    assert len(args) % 2 == 0
+    doc_ref = (doc_ref or db).collection(args[0]).document(args[1])
+    args = args[2:]
+    if args:
+        return find(args, doc_ref=doc_ref)
+    else:
+        return doc_ref
 
 
-def get(doc_ref):
+def to_dict(doc_ref):
     try:
         doc = doc_ref.get()
         return doc.to_dict()
     except google.cloud.exceptions.NotFound:
         return None
-
-
-def set(collection_id: str, document_id: str, data: dict):
-    db.collection(collection_id).document(document_id).set(data)

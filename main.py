@@ -1,5 +1,6 @@
 import json
 import time
+from copy import deepcopy
 
 from dateutil import parser
 
@@ -49,19 +50,26 @@ def process_user(request=None):
     request_json = request.get_json(silent=True)
     user = request_json['user']
 
-    user_data = firestore.get_dict(const.FIRESTORE_USERS, user)
-    svc_youtube = oauth_utils.get_service_object("youtube", "v3", user, user_data)
+    user_ref = firestore.find(const.FIRESTORE_USERS, user)
+    user_data = firestore.to_dict(user_ref)
+    org_user_data = deepcopy(user_data)
+    svc_youtube = oauth_utils.get_service_object("youtube", "v3", user, user_ref=user_ref, user_data=user_data)
     videos = get_liked_videos(svc_youtube)
 
     last_processed = user_data.get(const.FIRESTORE_USERS_KEY_LAST_PROCESSED, 0)
     videos_to_process = [v for v in videos if v['liked_at'] > last_processed]
 
     if videos_to_process:
+        # batch = firestore.db.batch()
+        # for v in videos_to_process:
+        #     video_document_ref = user_ref.collection(const.FIRESTORE_USERS_KEY_VIDEOS).document(v['video_id'])
+        #     batch.set(video_document_ref, v)
+        # batch.commit()
         last_processed = videos[0]["liked_at"] if videos else 0
         user_data.update({const.FIRESTORE_USERS_KEY_LAST_PROCESSED: last_processed})
-        firestore.set(const.FIRESTORE_USERS, user, user_data)
+        user_ref.set(user_data)
 
-    return json.dumps({'videos': videos, 'videos_to_process': videos_to_process}, ensure_ascii=False)
+    return {'videos': videos, 'videos_to_process': videos_to_process, 'org_user_data': org_user_data, 'user_data': user_data}
 
 
 def process_video(request=None):
