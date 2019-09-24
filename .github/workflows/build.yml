@@ -26,3 +26,15 @@ jobs:
       run: |
         pip install pytest
         # pytest test/unit
+  deploy:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Create gcp_key.json
+      env:
+        super_secret: ${{ secrets.GCP_KEY }}
+      run: |
+        echo ${GCP_KEY} > gcp_key.json
+    - name: Deploy
+      run: |
+        echo "TBD"
