@@ -22,3 +22,5 @@ jobs:
       uses: actions/gcloud/cli@master
       with:
         args: functions list
+      env:
+        CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}
