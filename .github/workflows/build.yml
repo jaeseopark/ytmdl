@@ -31,14 +31,14 @@ jobs:
         super_secret: ${{ secrets.GCP_KEY }}
       run: |
         echo ${GCP_KEY} > gcp_key.json
-    - name: Create saple_secret.json
+    - name: Create sample_secret.json
       env:
         super_secret: ${{ secrets.SAMPLE_SECRET }}
       run: |
         echo ${SAMPLE_SECRET} > sample_secret.json
-    - name: print saple_secret.json
+    - name: print sample_secret.json
       run: |
-        cat saple_secret.json
+        cat sample_secret.json
     - name: Deploy
       run: |
         echo "TBD"
