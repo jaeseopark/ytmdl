@@ -20,5 +20,5 @@ jobs:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
     - name: List Cloud Functions
       uses: actions/gcloud/cli@master
-      run: |
-        gcloud functions list
+      with:
+        args: functions list
