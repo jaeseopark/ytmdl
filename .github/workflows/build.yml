@@ -28,12 +28,12 @@ jobs:
         # pytest test/unit
     - name: Create gcp_key.json
       env:
-        super_secret: ${{ secrets.GCP_KEY }}
+        GCP_KEY: ${{ secrets.GCP_KEY }}
       run: |
         echo ${GCP_KEY} > gcp_key.json
     - name: Create sample_secret.json
       env:
-        super_secret: ${{ secrets.SAMPLE_SECRET }}
+        SAMPLE_SECRET: ${{ secrets.SAMPLE_SECRET }}
       run: |
         echo ${SAMPLE_SECRET} > sample_secret.json
     - name: print sample_secret.json
