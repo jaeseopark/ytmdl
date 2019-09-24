@@ -32,6 +32,7 @@ jobs:
       env:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
     - name: List Cloud Functions
-      uses: actions/gcloud/cli@master
       run: |
         gcloud functions list
+      if: github.event == 'push'
+      uses: actions/gcloud/cli@master
