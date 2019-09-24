@@ -1,14 +1,12 @@
-name: Test
+name: Deploy
 
 on:
   push:
     branches:
     - master
 
-# TODO branch builds & PR builds
-    
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
@@ -16,28 +14,11 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.7
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Lint with flake8
-      run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=1000 --statistics
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        # pytest test/unit
     - name: Authenticate GCP
-      if: github.branch == 'master'
       uses: actions/gcloud/auth@master
       env:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
-#     - name: List Cloud Functions
-#       if: github.branch == 'master'
-#       uses: actions/gcloud/cli@master
-#       run: |
-#         gcloud functions list
+    - name: List Cloud Functions
+      uses: actions/gcloud/cli@master
+      run: |
+        gcloud functions list
