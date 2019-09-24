@@ -26,19 +26,12 @@ jobs:
       run: |
         pip install pytest
         # pytest test/unit
-    - name: Create gcp_key.json
+    - name: Authenticate GCP
+      if: github.event == 'push'
+      uses: actions/gcloud/auth@master
       env:
-        GCP_KEY: ${{ secrets.GCP_KEY }}
+        GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+    - name: List Cloud Functions
+      uses: actions/gcloud/cli@master
       run: |
-        echo ${GCP_KEY} > gcp_key.json
-    - name: Create sample_secret.json
-      env:
-        SAMPLE_SECRET: ${{ secrets.SAMPLE_SECRET }}
-      run: |
-        echo ${SAMPLE_SECRET} > sample_secret.json
-    - name: print sample_secret.json
-      run: |
-        cat sample_secret.json
-    - name: Deploy
-      run: |
-        echo "TBD"
+        gcloud functions list
