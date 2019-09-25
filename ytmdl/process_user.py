@@ -1,7 +1,5 @@
-import json
 import logging
 import time
-from copy import deepcopy
 
 from dateutil import parser
 
@@ -49,14 +47,13 @@ def get_liked_videos(svc):
 
 
 def process_user(data=None, context=None):
-    # if const.FIRESTORE_USERS_KEY_LAST_TRIGGERED not in data.get("updateMask", dict()):
-    #     return
+    handled_event = firestore.handle_event(data)
 
-    LOGGER.info(json.dumps(data))
+    if const.FIRESTORE_USERS_KEY_LAST_TRIGGERED not in handled_event:
+        # Not interested in other updates.
+        return
 
-    return
-
-    user = const.FIRESTORE_USERS_DEFAULT  # TODO: real value here
+    user = handled_event["id"]
 
     user_ref = firestore.find(const.FIRESTORE_USERS, user)
     user_data = firestore.to_dict(user_ref)

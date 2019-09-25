@@ -16,6 +16,12 @@ else:
 
 db = firestore.client()
 
+_types = {
+    'integerValue': int,
+    'booleanValue': bool,
+    'stringValue': str,
+}
+
 
 def find(*args: Sequence, doc_ref=None):
     doc_ref = doc_ref or db
@@ -37,3 +43,20 @@ def to_dict(doc_ref):
         return doc.to_dict()
     except google.cloud.exceptions.NotFound:
         return None
+
+
+def handle_event(firestore_event: dict):
+    def sanitize(field_value_dict):
+        if field_value_dict is None:
+            return None
+        typ, value = field_value_dict.popitem()
+        return _types[typ](value)
+
+    field_paths = firestore_event["updateMask"].get("fieldPaths") or list()
+    handled = {k: [
+        sanitize(firestore_event["oldValue"]["fields"].get(k)),
+        sanitize(firestore_event["value"]["fields"].get(k))
+    ] for k in field_paths}
+
+    handled["id"] = firestore_event["value"]["name"].split("/")[-1]
+    return handled
