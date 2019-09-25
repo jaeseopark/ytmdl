@@ -8,13 +8,27 @@ from google.cloud.firestore_v1 import CollectionReference
 
 from ytmdl.utils import gcp_utils
 
-creds = gcp_utils.get_service_creds()
-if gcp_utils.is_cloud():
-    firebase_admin.initialize_app(creds, {'projectId': os.getenv('GCP_PROJECT')})
-else:
-    firebase_admin.initialize_app(creds)
 
-db = firestore.client()
+class FirestoreClient:
+    __instance = None
+
+    def __init__(self):
+        def lazy_init():
+            creds = gcp_utils.get_service_creds()
+            if gcp_utils.is_cloud():
+                firebase_admin.initialize_app(creds, {'projectId': os.getenv('GCP_PROJECT')})
+            else:
+                firebase_admin.initialize_app(creds)
+
+            return firestore.client()
+
+        if not FirestoreClient.__instance:
+            FirestoreClient.__instance = lazy_init()
+
+    @property
+    def instance(self):
+        return FirestoreClient.__instance
+
 
 _types = {
     'integerValue': int,
@@ -23,8 +37,12 @@ _types = {
 }
 
 
+def batch():
+    return FirestoreClient().instance.batch()
+
+
 def find(*args: Sequence, doc_ref=None):
-    doc_ref = doc_ref or db
+    doc_ref = doc_ref or FirestoreClient().instance
     if isinstance(doc_ref, CollectionReference):
         doc_ref = doc_ref.document(args[0])
     else:

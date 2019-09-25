@@ -65,7 +65,7 @@ def process_user(event, context=None):
     videos_to_process = [v for v in videos if v['liked_at'] > last_processed]
 
     if videos_to_process:
-        batch = firestore.db.batch()
+        batch = firestore.batch()
         for v in videos_to_process:
             video_document_ref = firestore.find(const.FIRESTORE_USERS_KEY_VIDEOS, v["video_id"], doc_ref=user_ref)
             batch.set(video_document_ref, v)
