@@ -1,3 +1,5 @@
+import json
+import logging
 import time
 from copy import deepcopy
 
@@ -5,6 +7,8 @@ from dateutil import parser
 
 from ytmdl import const, firestore
 from ytmdl.utils import oauth_utils
+
+LOGGER = logging.getLogger(__name__)
 
 
 def get_liked_videos(svc):
@@ -47,6 +51,10 @@ def get_liked_videos(svc):
 def process_user(data=None, context=None):
     # if const.FIRESTORE_USERS_KEY_LAST_TRIGGERED not in data.get("updateMask", dict()):
     #     return
+
+    LOGGER.info(json.dumps(data))
+
+    return
 
     user = const.FIRESTORE_USERS_DEFAULT  # TODO: real value here
 
