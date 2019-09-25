@@ -15,6 +15,7 @@ jobs:
       env:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
   deploy_iterate_users:
+    runs-on: ubuntu-18.04
     steps:
     - name: Deploy
       uses: actions/gcloud/cli@master
@@ -23,6 +24,7 @@ jobs:
       env:
         CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}
   deploy_process_user:
+    runs-on: ubuntu-18.04
     steps:
     - name: Deploy
       uses: actions/gcloud/cli@master
