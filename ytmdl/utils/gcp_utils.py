@@ -2,7 +2,7 @@ import os
 
 from firebase_admin import credentials
 
-from const import LOCAL_SERVICE_SECRETS
+from ytmdl.const import LOCAL_SERVICE_SECRETS
 
 
 def is_cloud():

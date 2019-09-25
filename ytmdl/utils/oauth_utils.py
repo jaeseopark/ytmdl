@@ -4,9 +4,8 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from oauth2client import file, client, tools
 
-import const
-import firestore
-from utils.io_utils import safe_open
+from ytmdl import const, firestore
+from ytmdl.utils.io_utils import safe_open
 
 SCOPES = ["https://www.googleapis.com/auth/youtube.readonly", "https://www.googleapis.com/auth/drive.file"]
 

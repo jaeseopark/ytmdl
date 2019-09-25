@@ -105,3 +105,4 @@ venv.bak/
 
 .idea/
 ytm*.json
+.DS_Store

@@ -4,8 +4,9 @@ from typing import Sequence
 import firebase_admin
 import google as google
 from firebase_admin import firestore
+from google.cloud.firestore_v1 import CollectionReference
 
-from utils import gcp_utils
+from ytmdl.utils import gcp_utils
 
 creds = gcp_utils.get_service_creds()
 if gcp_utils.is_cloud():
@@ -17,11 +18,15 @@ db = firestore.client()
 
 
 def find(*args: Sequence, doc_ref=None):
-    assert len(args) % 2 == 0
-    doc_ref = (doc_ref or db).collection(args[0]).document(args[1])
-    args = args[2:]
+    doc_ref = doc_ref or db
+    if isinstance(doc_ref, CollectionReference):
+        doc_ref = doc_ref.document(args[0])
+    else:
+        doc_ref = doc_ref.collection(args[0])
+
+    args = args[1:]
     if args:
-        return find(args, doc_ref=doc_ref)
+        return find(*args, doc_ref=doc_ref)
     else:
         return doc_ref
 
