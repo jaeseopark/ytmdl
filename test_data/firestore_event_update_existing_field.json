@@ -1,0 +1,33 @@
+{
+  "oldValue": {
+    "createTime": "2019-09-23T02:23:01.676897Z",
+    "fields": {
+      "last_processed": {
+        "integerValue": "1569128810"
+      },
+      "last_triggered": {
+        "integerValue": "1569387601"
+      }
+    },
+    "name": ".../documents/users/default",
+    "updateTime": "2019-09-25T05:23:25.915823Z"
+  },
+  "updateMask": {
+    "fieldPaths": [
+      "last_triggered"
+    ]
+  },
+  "value": {
+    "createTime": "2019-09-23T02:23:01.676897Z",
+    "fields": {
+      "last_processed": {
+        "integerValue": "1569128810"
+      },
+      "last_triggered": {
+        "integerValue": "1569389005"
+      }
+    },
+    "name": ".../documents/users/default",
+    "updateTime": "2019-09-25T05:23:25.915823Z"
+  }
+}
