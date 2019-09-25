@@ -46,8 +46,8 @@ def get_liked_videos(svc):
     return transformed_items[:const.YOUTUBE_LIST_LIMIT]
 
 
-def process_user(data=None, context=None):
-    handled_event = firestore.handle_event(data)
+def process_user(event, context=None):
+    handled_event = firestore.handle_event(event)
 
     if const.FIRESTORE_USERS_KEY_LAST_TRIGGERED not in handled_event:
         # Not interested in other updates.
