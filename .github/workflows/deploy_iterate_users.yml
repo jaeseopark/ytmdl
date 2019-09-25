@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy iterate_users
 
 on:
   push:
@@ -21,6 +21,6 @@ jobs:
     - name: Deploy
       uses: actions/gcloud/cli@master
       with:
-        args: functions deploy function-1 --region=us-central1
+        args: functions deploy iterate_users --region=us-central1 --entry-point=iterate_users
       env:
         CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}
