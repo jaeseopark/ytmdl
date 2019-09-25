@@ -1,4 +1,4 @@
-name: Deploy iterate_users
+name: Deploy
 
 on:
   push:
@@ -6,21 +6,27 @@ on:
     - master
 
 jobs:
-  deploy:
+  setup:
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.7
     - name: Authenticate GCP
       uses: actions/gcloud/auth@master
       env:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+  deploy_iterate_users:
+    steps:
     - name: Deploy
       uses: actions/gcloud/cli@master
       with:
         args: functions deploy iterate_users --region=us-central1 --entry-point=iterate_users
+      env:
+        CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}
+  deploy_process_user:
+    steps:
+    - name: Deploy
+      uses: actions/gcloud/cli@master
+      with:
+        args: functions deploy process_user --region=us-central1 --entry-point=process_user
       env:
         CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}
