@@ -4,7 +4,7 @@ from ytmdl.firestore import handle_event
 
 
 def test_update_existing_field():
-    with open('test_data/firestore_event_update_existing_field.json') as fp:
+    with open('test/resource/firestore_event_update_existing_field.json') as fp:
         event = json.load(fp)
 
     handled_event = handle_event(event)
@@ -16,7 +16,7 @@ def test_update_existing_field():
 
 
 def test_update_new_field():
-    with open('test_data/firestore_event_update_new_field.json') as fp:
+    with open('test/resource/firestore_event_update_new_field.json') as fp:
         event = json.load(fp)
 
     handled_event = handle_event(event)
