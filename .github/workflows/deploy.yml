@@ -26,3 +26,9 @@ jobs:
         args: functions deploy process_user --region=us-central1 --entry-point=process_user
       env:
         CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}
+    - name: Deploy process_video
+      uses: actions/gcloud/cli@master
+      with:
+        args: functions deploy process_video --region=us-central1 --entry-point=process_video
+      env:
+        CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}
