@@ -1,5 +1,9 @@
+import logging
+
 from ytmdl import const, firestore
 from ytmdl.utils.time_utils import get_posix_now
+
+LOGGER = logging.getLogger(__name__)
 
 
 def iterate_users(event=None, context=None):
@@ -13,3 +17,4 @@ def iterate_users(event=None, context=None):
     user_stream = firestore.find(const.FIRESTORE_USERS).stream()
     for user in user_stream:
         user.reference.update({const.FIRESTORE_USERS_KEY_LAST_TRIGGERED: get_posix_now()})
+        LOGGER.info(user.id)
