@@ -15,14 +15,12 @@ jobs:
       env:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
     - name: Deploy iterate_users
-      needs: Authenticate GCP
       uses: actions/gcloud/cli@master
       with:
         args: functions deploy iterate_users --region=us-central1 --entry-point=iterate_users
       env:
         CLOUDSDK_CORE_PROJECT: ${{ secrets.CLOUDSDK_CORE_PROJECT }}
     - name: Deploy process_user
-      needs: Authenticate GCP
       uses: actions/gcloud/cli@master
       with:
         args: functions deploy process_user --region=us-central1 --entry-point=process_user
