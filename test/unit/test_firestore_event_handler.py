@@ -22,6 +22,6 @@ def test_update_new_field():
     handled_event = handle_event(event)
 
     lt = handled_event["last_triggered"]
-    assert lt[0] == None
+    assert lt[0] is None
     assert lt[1] == 1569389560
     assert handled_event["id"] == "default"
