@@ -15,7 +15,14 @@ def download(video_id: str, path=None, ext="mp3"):
     makedirs_auto("/tmp/ytmdl")
     output_template = path or "/tmp/ytmdl/%(title)s-%(id)s.%(ext)s"
 
-    YoutubeDL(params={
+    # progress = {}
+
+    def my_hook(d):
+        LOGGER.info(json.dumps(d))
+        # if d['status'] == 'finished':
+        #     print('Done downloading, now converting ...')
+
+    params = {
         'nocheckcertificate': True,
         'format': 'bestaudio/best',
         'outtmpl': output_template,
@@ -23,9 +30,12 @@ def download(video_id: str, path=None, ext="mp3"):
             'key': 'FFmpegExtractAudio',
             'preferredcodec': ext,
             'preferredquality': '192',
-        }]
-        # 'progress_hooks': [my_hook],
-    }).download(["https://www.youtube.com/watch?v=" + video_id])
+        }],
+        'progress_hooks': [my_hook],
+        "logger": LOGGER
+    }
+
+    YoutubeDL(params).download(["https://www.youtube.com/watch?v=" + video_id])
 
 
 def process_video(event, context=None):
