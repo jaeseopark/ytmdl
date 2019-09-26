@@ -45,8 +45,7 @@ def batch():
     return FirestoreClient().instance.batch()
 
 
-def find(*args: Sequence, doc_ref=None):
-    doc_ref = doc_ref or FirestoreClient().instance
+def _find(doc_ref, *args):
     if isinstance(doc_ref, CollectionReference):
         doc_ref = doc_ref.document(args[0])
     else:
@@ -54,9 +53,13 @@ def find(*args: Sequence, doc_ref=None):
 
     args = args[1:]
     if args:
-        return find(*args, doc_ref=doc_ref)
+        return _find(doc_ref, *args)
     else:
         return doc_ref
+
+
+def find(*args):
+    return _find(FirestoreClient().instance, *args)
 
 
 def to_dict(doc_ref):
@@ -80,6 +83,7 @@ def handle_event(firestore_event: dict):
         sanitize(firestore_event["value"]["fields"].get(k))
     ] for k in field_paths}
 
+    handled["name"] = firestore_event["value"]["name"]
     handled["id"] = firestore_event["value"]["name"].split("/")[-1]
 
     LOGGER.info(json.dumps(handled))
