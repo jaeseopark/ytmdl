@@ -4,7 +4,7 @@ import logging
 from youtube_dl import YoutubeDL
 
 from ytmdl import firestore
-from ytmdl.utils.io_utils import safe_open
+from ytmdl.utils.io_utils import makedirs_auto
 
 LOGGER = logging.getLogger(__name__)
 
@@ -12,11 +12,9 @@ LOGGER = logging.getLogger(__name__)
 def download(video_id: str, path=None):
     assert isinstance(video_id, str)
 
-    with safe_open('/tmp/ytmdl/PLACEHOLDER', 'a'):
-        # create folder(s) if not already there
-        pass
-
+    makedirs_auto("/tmp/ytmdl")
     output_template = path or "/tmp/ytmdl/%(title)s-%(id)s.%(ext)s"
+
     YoutubeDL(params={
         'nocheckcertificate': True,
         'format': 'bestaudio/best',

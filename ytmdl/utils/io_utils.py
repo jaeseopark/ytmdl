@@ -1,11 +1,13 @@
 import os
 
 
+def makedirs_auto(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+    assert os.path.isdir(path)
+
+
 def safe_open(path, *args, **kwargs):
     dir_path = os.path.split(path)[0]
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
-
-    assert os.path.isdir(dir_path)
-
+    makedirs_auto(dir_path)
     return open(path, *args, **kwargs)
