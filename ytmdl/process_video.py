@@ -9,7 +9,7 @@ from ytmdl.utils.io_utils import makedirs_auto
 LOGGER = logging.getLogger(__name__)
 
 
-def download(video_id: str, path=None):
+def download(video_id: str, path=None, ext="mp3"):
     assert isinstance(video_id, str)
 
     makedirs_auto("/tmp/ytmdl")
@@ -21,7 +21,7 @@ def download(video_id: str, path=None):
         'outtmpl': output_template,
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
+            'preferredcodec': ext,
             'preferredquality': '192',
         }]
         # 'progress_hooks': [my_hook],
