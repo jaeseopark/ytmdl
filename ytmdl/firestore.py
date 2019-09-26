@@ -80,6 +80,7 @@ def handle_event(firestore_event: dict):
         sanitize(firestore_event["value"]["fields"].get(k))
     ] for k in field_paths}
 
+    handled["name"] = firestore_event["value"]["name"]
     handled["id"] = firestore_event["value"]["name"].split("/")[-1]
 
     LOGGER.info(json.dumps(handled))

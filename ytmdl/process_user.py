@@ -5,7 +5,7 @@ import time
 from dateutil import parser
 
 from ytmdl import const, firestore
-from ytmdl.utils import oauth_utils
+from ytmdl.utils import gcp_utils
 
 LOGGER = logging.getLogger(__name__)
 
@@ -59,7 +59,7 @@ def process_user(event, context=None):
 
     user_ref = firestore.find(const.FIRESTORE_USERS, user)
     user_data = firestore.to_dict(user_ref)
-    svc_youtube = oauth_utils.get_service_object("youtube", "v3", user, user_ref=user_ref, user_data=user_data)
+    svc_youtube = gcp_utils.get_service_object("youtube", "v3", user_data[const.FIRESTORE_USERS_KEY_YOUTUBE_TOKEN])
     videos = get_liked_videos(svc_youtube)
 
     last_processed = user_data.get(const.FIRESTORE_USERS_KEY_LAST_PROCESSED, 0)
