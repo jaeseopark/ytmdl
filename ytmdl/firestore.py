@@ -1,3 +1,5 @@
+import json
+import logging
 import os
 from typing import Sequence
 
@@ -7,6 +9,8 @@ from firebase_admin import firestore
 from google.cloud.firestore_v1 import CollectionReference
 
 from ytmdl.utils import gcp_utils
+
+LOGGER = logging.getLogger(__name__)
 
 
 class FirestoreClient:
@@ -77,4 +81,7 @@ def handle_event(firestore_event: dict):
     ] for k in field_paths}
 
     handled["id"] = firestore_event["value"]["name"].split("/")[-1]
+
+    LOGGER.info(json.dumps(handled))
+
     return handled

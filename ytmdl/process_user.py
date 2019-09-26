@@ -48,6 +48,7 @@ def get_liked_videos(svc):
 
 
 def process_user(event, context=None):
+    LOGGER.info(json.dumps(event))
     handled_event = firestore.handle_event(event)
 
     if const.FIRESTORE_USERS_KEY_LAST_TRIGGERED not in handled_event:
