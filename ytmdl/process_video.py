@@ -27,11 +27,11 @@ def download(video_id: str, path=None):
             'preferredquality': '192',
         }]
         # 'progress_hooks': [my_hook],
-    }).download(["https://www.youtube.com/watch?v=" + video_id])
+    }).download([video_id])
 
 
 def process_video(event, context=None):
     LOGGER.info(json.dumps(event))
     handled_event = firestore.handle_event(event)
-    download([handled_event["id"]])
+    download(handled_event["id"])
     # TODO: upload to gdrive
