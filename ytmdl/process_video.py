@@ -24,7 +24,7 @@ def download(video_id: str, path=None):
             'preferredquality': '192',
         }]
         # 'progress_hooks': [my_hook],
-    }).download([f"https://www.youtube.com/watch?v={video_id}"])
+    }).download(["https://www.youtube.com/watch?v=" + video_id])
 
 
 def process_video(event, context=None):
