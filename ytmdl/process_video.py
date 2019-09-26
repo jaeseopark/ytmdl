@@ -50,15 +50,9 @@ def download(url: str, path=None, ext="m4a"):
     })
 
     YoutubeDL(params).download([url])
-    result["filename"] = "{}.{}".format(os.path.splitext(result["filename"])[0], ext)
 
-    return result
-
-
-def upload(service, path, metadata: dict):
-    media = MediaFileUpload(path)
-    response = service.files().create(body=metadata or dict(), media_body=media, fields='id').execute()
-    return response["id"]
+    # Return the path of the audio file
+    return "{}.{}".format(os.path.splitext(result["filename"])[0], ext)
 
 
 def process_video(event, context=None):
@@ -67,11 +61,18 @@ def process_video(event, context=None):
     handled_event = firestore.handle_event(event)
     user = handled_event["name"].split("/")[-3]
     url = to_url(handled_event["id"])
-    result = download(url)
+    path = download(url)
 
-    user_ref = firestore.find(const.FIRESTORE_USERS, user)
-    service = gcp_utils.get_service_object("drive", "v3", token=firestore.to_dict(user_ref)[const.FIRESTORE_USERS_KEY_DRIVE_TOKEN])
+    # Upload to Google Drive
+    user_data = firestore.to_dict(firestore.find(const.FIRESTORE_USERS, user))
+    service = gcp_utils.get_service_object("drive", "v3", token=user_data[const.FIRESTORE_USERS_KEY_DRIVE_TOKEN])
+    key = upload(path, service, folder_id=user_data[const.FIRESTORE_USERS_KEY_DRIVE_FOLDER_ID])
 
-    path = result["filename"]
-    key = upload(service, path, os.path.split(path)[-1])
-    service.comments().create(fileId=key, body={'content': url}, fields='id').execute()
+    # post comment?
+    # service.comments().create(fileId=key, body={'content': url}, fields='id').execute()
+
+
+def upload(path, service, folder_id):
+    metadata = {"name": os.path.split(path)[-1], "parents": [folder_id]}
+    response = service.files().create(body=metadata, media_body=MediaFileUpload(path), fields='id').execute()
+    return response["id"]

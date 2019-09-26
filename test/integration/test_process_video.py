@@ -11,6 +11,6 @@ def test_download_video_and_convert_to_audio():
     handled_event = firestore.handle_event(event)
 
     path = os.path.join(const.TMP_PATH, "test_download_video_and_convert_to_audio.m4a")
-    response = process_video.download(process_video.to_url(handled_event["id"]), path)
+    returned_path = process_video.download(process_video.to_url(handled_event["id"]), path)
 
-    assert path == response["filename"]
+    assert path == returned_path
