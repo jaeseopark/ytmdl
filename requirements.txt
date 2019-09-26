@@ -1,3 +1,5 @@
 python-dateutil
 oauth2client
 firebase-admin
+youtube-dl
+ffmpeg-python

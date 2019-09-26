@@ -73,6 +73,6 @@ def process_user(event, context=None):
         last_processed = videos[0]["liked_at"] if videos else 0
         user_ref.update({const.FIRESTORE_USERS_KEY_LAST_PROCESSED: last_processed})
 
-    r = {'videos': videos, 'videos_to_process': videos_to_process}
-    LOGGER.info(json.dumps(r, indent=2))
-    return r
+    response = {'videos': videos, 'videos_to_process': videos_to_process}
+    LOGGER.info(json.dumps(response))
+    return response
