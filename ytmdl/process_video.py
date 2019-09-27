@@ -68,8 +68,8 @@ def process_video(event, context=None):
     service = gcp_utils.get_service_object("drive", "v3", token=user_data[const.FIRESTORE_USERS_KEY_DRIVE_TOKEN])
     key = upload(path, service, folder_id=user_data[const.FIRESTORE_USERS_KEY_DRIVE_FOLDER_ID])
 
-    # post comment?
-    # service.comments().create(fileId=key, body={'content': url}, fields='id').execute()
+    # post comment
+    service.comments().create(fileId=key, body={'content': url}, fields='id').execute()
 
 
 def upload(path, service, folder_id):
