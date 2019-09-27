@@ -1,6 +1,6 @@
 # ytmdl
 
-Converts all of your Liked videos on YouTube to audio files and saves them to your Google Drive. The delivery happens on an ongoing basis.
+Continuously saves all of your Liked videos on YouTube to your Google Drive as audio files (m4a).
 
 ### Architecture
 
