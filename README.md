@@ -22,8 +22,8 @@ ytmdl is designed to run on Google Cloud Platform. Here are the major components
 
 ```bash
 pytest test/unit         # isolated test cases; safe to run in any environment
-pytest test/integration  # requires LOCAL_SERVICE_SECRETS
-pytest test/manual       # requires LOCAL_SERVICE_SECRETS and manual validation
+pytest test/integration  # requires LOCAL_SERVICE_SECRETS and a 'default' user in Firestore
+pytest test/manual       # requires LOCAL_SERVICE_SECRETS, a 'default' user in Firestore, and manual validation
 ```
 
 ### Runtime environment
