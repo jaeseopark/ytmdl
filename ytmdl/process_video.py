@@ -4,6 +4,7 @@ import os
 
 from googleapiclient.http import MediaFileUpload
 from youtube_dl import YoutubeDL
+from youtube_dl.utils import ExtractorError
 
 from ytmdl import firestore, const
 from ytmdl.utils import gcp_utils
@@ -61,7 +62,14 @@ def process_video(event, context=None):
     handled_event = firestore.handle_event(event)
     user = handled_event["name"].split("/")[-3]
     url = to_url(handled_event["id"])
-    path = download(url)
+
+    try:
+        path = download(url)
+    except ExtractorError as e:
+        if "This video is only available to Music Premium members" in str(e):
+            # Skip premium-only videos
+            return
+        raise
 
     # Upload to Google Drive
     user_data = firestore.to_dict(firestore.find(const.FIRESTORE_USERS, user))
