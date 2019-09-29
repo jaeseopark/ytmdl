@@ -85,5 +85,6 @@ def process_video(event, context=None):
 
 def upload(path, service, folder_id):
     metadata = {"name": os.path.split(path)[-1], "parents": [folder_id]}
-    response = service.files().create(body=metadata, media_body=MediaFileUpload(path), fields='id').execute()
+    media = MediaFileUpload(path, mimetype="audio/mp4")
+    response = service.files().create(body=metadata, media_body=media, fields='id').execute()
     return response["id"]
