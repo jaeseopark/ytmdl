@@ -34,11 +34,16 @@ def download(url: str, path=None, ext="m4a"):
         'nocheckcertificate': True,
         'format': 'bestaudio/best',
         'outtmpl': output_template,
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': ext,
-            'preferredquality': '192',
-        }]
+        'postprocessors': [
+            {
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': ext,
+                'preferredquality': '192',
+            },
+            {
+                'key': 'FFmpegMetadata'
+            }
+        ]
     }
 
     # Log params before adding unserializable values
