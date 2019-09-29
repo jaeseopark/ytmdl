@@ -4,19 +4,7 @@ Continuously saves all of your Liked videos on YouTube to your Google Drive as a
 
 ### Architecture
 
-(Sequence diagram coming soon...)
-
-ytmdl is designed to run on Google Cloud Platform. Here are the major components that power the system:
-
-* Cloud Scheduler
-  * 5-min interval
-* Firestore
-  * `config.{app}`
-  * `users.{user}.videos.{video}`
-* Cloud Functions
-  * [`iterate_users`](ytmdl/iterate_users.py) Triggered by Cloud Scheduler
-  * [`process_user`](ytmdl/process_user.py) Triggered by Firestore `config.{app}`
-  * [`process_video`](ytmdl/process_video.py) Triggered by Firestore `users.{user}.videos.{video}`
+![Sequence Diagram](ytmdl-sequence.svg)
 
 ### Test
 
