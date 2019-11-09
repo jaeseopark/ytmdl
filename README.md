@@ -1,5 +1,7 @@
 # ytmdl
 
+[![codecov](https://codecov.io/gh/jaeseopark/ytmdl/branch/master/graph/badge.svg)](https://codecov.io/gh/jaeseopark/ytmdl)
+
 Continuously saves all of your Liked videos on YouTube to your Google Drive as audio files (m4a).
 
 ### Architecture
