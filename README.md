@@ -4,7 +4,7 @@ Continuously saves all of your Liked videos on YouTube to your Google Drive as a
 
 ### Architecture
 
-![Sequence Diagram](ytmdl-sequence.svg)
+![Sequence Diagram](https://ytmdl.s3-us-west-2.amazonaws.com/ytmdlsequence.jpg)
 
 ### Test
 
