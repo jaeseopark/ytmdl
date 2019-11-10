@@ -4,10 +4,6 @@
 
 Continuously saves all of your Liked videos on YouTube to your Google Drive as audio files (m4a).
 
-### Architecture
-
-![Sequence Diagram](https://ytmdl.s3-us-west-2.amazonaws.com/ytmdl-sequence.png)
-
 ### Test
 
 ```bash
@@ -22,3 +18,7 @@ pytest test/manual       # requires LOCAL_SERVICE_SECRETS, a 'default' user in F
 docker build -t ytmdl .  # see Dockerfile for details
 docker run -it ytmdl
 ```
+
+### Architecture
+
+![Sequence Diagram](https://ytmdl.s3-us-west-2.amazonaws.com/ytmdl-sequence.png)
