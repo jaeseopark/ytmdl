@@ -61,6 +61,8 @@ def download(url: str, path=None, ext="m4a"):
         if "This video is only available to Music Premium members" in str(e):
             # Skip premium-only videos
             return None
+        elif "This video is not available. Sorry about that." in str(e):
+            return None
         raise
 
     # Return the path of the audio file
