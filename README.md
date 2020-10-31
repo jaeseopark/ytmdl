@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/jaeseopark/ytmdl/branch/master/graph/badge.svg)](https://codecov.io/gh/jaeseopark/ytmdl)
 
-Uses GCP PubSub & Cloud Functions to continuously download music from YouTube. All Liked videos get saved to the designated Google Drive location.
+Uses GCP PubSub & Cloud Functions to continuously download music from YouTube. The service is hosted on the cloud. All songs 'liked' by the user get saved to the designated Google Drive location.
 
 ### Test
 
