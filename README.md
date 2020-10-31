@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/jaeseopark/ytmdl/branch/master/graph/badge.svg)](https://codecov.io/gh/jaeseopark/ytmdl)
 
-Continuously saves all of your Liked videos on YouTube to your Google Drive as audio files (m4a).
+Uses GCP PubSub & Cloud Functions to continuously download music from YouTube. All Liked videos get saved to the designated Google Drive location.
 
 ### Test
 
